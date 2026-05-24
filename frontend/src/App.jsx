@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 
-const API = import.meta.env.VITE_API_URL || "http://localhost:8000/api";
+const API = "https://breathe-esg-backend-0cws.onrender.com/api";
 
 function useAuth() {
   const [token, setToken] = useState(() => localStorage.getItem("token"));
