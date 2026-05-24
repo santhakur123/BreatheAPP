@@ -1,0 +1,53 @@
+services:
+  - type: web
+    name: breathe-esg-backend
+    env: python
+    region: singapore
+    plan: free
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt && python manage.py collectstatic --noinput && python manage.py migrate && python manage.py seed_demo_data
+    startCommand: gunicorn breathe_esg.wsgi:application --bind 0.0.0.0:$PORT
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: breathe_esg.settings
+      - key: DEBUG
+        value: "False"
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DB_NAME
+        fromDatabase:
+          name: breathe-esg-db
+          property: database
+      - key: DB_USER
+        fromDatabase:
+          name: breathe-esg-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: breathe-esg-db
+          property: password
+      - key: DB_HOST
+        fromDatabase:
+          name: breathe-esg-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: breathe-esg-db
+          property: port
+
+  - type: web
+    name: breathe-esg-frontend
+    env: static
+    region: singapore
+    plan: free
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    envVars:
+      - key: VITE_API_URL
+        value: https://breathe-esg-backend.onrender.com/api
+
+databases:
+  - name: breathe-esg-db
+    plan: free
+    region: singapore
