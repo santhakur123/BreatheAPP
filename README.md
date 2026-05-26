@@ -1,5 +1,5 @@
 # Breathe ESG — Emissions Ingestion & Review Platform
-
+# THis is the live link  of render :https://breathe-esg-frontend-41r2.onrender.com/
 A Django REST + React prototype for ingesting, normalising, and reviewing emissions data from three source types: SAP flat files, utility portal CSVs, and corporate travel JSON exports.
 
 ## Demo Credentials
@@ -62,29 +62,29 @@ Frontend runs at http://localhost:5173
 ```
 breathe-esg/
 ├── backend/
-│   ├── breathe_esg/          # Django settings, URLs, WSGI
+│   ├── breathe_esg/          
 │   ├── apps/
-│   │   ├── accounts/         # Auth: login, logout, /me
-│   │   ├── emissions/        # Core models, views, serializers
-│   │   │   ├── models.py     # Organisation, IngestionBatch, EmissionRecord, EditLog
-│   │   │   ├── views.py      # Dashboard, record CRUD, review actions
+│   │   ├── accounts/         
+│   │   ├── emissions/        
+│   │   │   ├── models.py     
+│   │   │   ├── views.py      
 │   │   │   └── serializers.py
-│   │   ├── ingestion/        # Upload endpoints + parsers
-│   │   │   ├── views.py      # /ingest/sap/, /ingest/utility/, /ingest/travel/
+│   │   ├── ingestion/       
+│   │   │   ├── views.py      
 │   │   │   └── parsers/
-│   │   │       ├── sap_parser.py      # SAP flat file → EmissionRecord
-│   │   │       ├── utility_parser.py  # Utility CSV → EmissionRecord
-│   │   │       └── travel_parser.py   # Travel JSON → EmissionRecord
-│   │   └── audit/            # Placeholder for audit export
+│   │   │       ├── sap_parser.py      
+│   │   │       ├── utility_parser.py  
+│   │   │       └── travel_parser.py   
+│   │   └── audit/            
 │   └── requirements.txt
 ├── frontend/
-│   └── src/App.jsx           # Single-file React app
+│   └── src/App.jsx           
 ├── docs/
-│   ├── MODEL.md              # Data model & rationale
-│   ├── DECISIONS.md          # Every ambiguity resolved
-│   ├── TRADEOFFS.md          # Three things not built
-│   └── SOURCES.md            # Real-world format research
-└── render.yaml               # Render deployment config
+│   ├── MODEL.md              
+│   ├── DECISIONS.md         
+│   ├── TRADEOFFS.md          
+│   └── SOURCES.md            
+└── render.yaml              
 ```
 
 ---
@@ -126,38 +126,6 @@ breathe-esg/
 
 ---
 
-## Deployment on Render
 
-1. Push to GitHub
-2. Go to [render.com](https://render.com) → New → Blueprint
-3. Connect your repo
-4. Render reads `render.yaml` and creates: PostgreSQL DB, Django backend, React static site
-5. Set `VITE_API_URL` in the frontend service to your backend's Render URL
 
-**Important:** After first deploy, if `seed_demo_data` didn't run automatically, trigger it manually:
-```
-Render Dashboard → Backend service → Shell → python manage.py seed_demo_data
-```
 
----
-
-## Sample Data Files
-
-The `seed_demo_data` management command automatically seeds all three sources. To test manual uploads:
-
-**SAP flat file** — Create a `.txt` file with tab-separated columns:
-```
-BELNR	BUDAT	WERKS	MAKTX	MENGE	MEINS	LIFNR	KOSTL	DMBTR	WAERS
-5000099001	20240401	IN01	Diesel Kraftstoff	3000.000	L	VEND001	CC-OPS	210000	INR
-```
-
-**Utility CSV** — Create a `.csv` with:
-```
-Account Number,Meter Number,Reading Date,Units Consumed,Unit,Amount,Currency,Location,Tariff Code
-KEB-10099,MTR-001,01/04/2024,42000,kWh,294000,INR,New Site,HT-2
-```
-
-**Travel JSON** — POST body or `.json` file:
-```json
-{"trips": [{"id": "T001", "traveller": "Test User", "department": "Eng", "segments": [{"type": "flight", "origin": "BLR", "destination": "DEL", "departure_date": "2024-04-01", "cabin": "economy", "passengers": 1}]}]}
-```
